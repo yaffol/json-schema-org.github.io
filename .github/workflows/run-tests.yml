@@ -1,0 +1,16 @@
+name: Build site and run tests
+
+on: push
+
+jobs:
+  build-and-test:
+    name: Build and test
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v3
+      - uses: actions/setup-node@v3
+        with:
+          node-version: '14'
+      - run: npm install ajv-cli@3.1.0
+      - run: bundle exec jekyll build
+      - run: ajv test -s draft-07/schema -d "learn/examples/*.json" --valid --add-used-schema=false
